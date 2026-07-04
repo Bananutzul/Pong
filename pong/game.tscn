@@ -1,0 +1,111 @@
+[gd_scene format=3 uid="uid://da8nnse7hu2wu"]
+
+[ext_resource type="PackedScene" uid="uid://d34pdkcpqd3ot" path="res://prefabs/paddle_1.tscn" id="1_80nbo"]
+[ext_resource type="Texture2D" uid="uid://f0utvxt0fri5" path="res://icon.svg" id="2_e2o6t"]
+[ext_resource type="Script" uid="uid://x65ynvhjg3c4" path="res://ball.gd" id="2_feb5d"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_fc0e3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mwb40"]
+size = Vector2(1213.2546, 10)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_feb5d"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_feb5d"]
+
+[node name="Root" type="Control" unique_id=1826606081]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="." unique_id=435745778]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MiddleLine" type="ColorRect" parent="." unique_id=1803769355]
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Wall" type="StaticBody2D" parent="." unique_id=261775552]
+physics_material_override = SubResource("PhysicsMaterial_fc0e3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall" unique_id=374842887]
+position = Vector2(577, 646.0463)
+scale = Vector2(0.9594029, 0.99073505)
+shape = SubResource("RectangleShape2D_mwb40")
+
+[node name="Polygon2D" type="Polygon2D" parent="Wall" unique_id=989709323]
+polygon = PackedVector2Array(0, 0, 1152, 0, 1152, 10, 0, 10)
+
+[node name="Wall2" type="StaticBody2D" parent="." unique_id=254874822]
+physics_material_override = SubResource("PhysicsMaterial_feb5d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall2" unique_id=286660505]
+position = Vector2(577.49994, 0)
+scale = Vector2(3.9618635, -1.4759895)
+shape = SubResource("RectangleShape2D_mwb40")
+
+[node name="Polygon2D" type="Polygon2D" parent="Wall2" unique_id=599335075]
+polygon = PackedVector2Array(0, 652, 1152, 652, 1152, 642, 0, 642)
+
+[node name="Paddle1" parent="." unique_id=1872911790 node_paths=PackedStringArray("score_label") instance=ExtResource("1_80nbo")]
+position = Vector2(71, 323)
+score_label = NodePath("../HBoxContainer/player1_score")
+
+[node name="Paddle2" parent="." unique_id=269313343 node_paths=PackedStringArray("score_label") instance=ExtResource("1_80nbo")]
+position = Vector2(1081, 323)
+player_id = 1
+score_label = NodePath("../HBoxContainer/player2_score")
+
+[node name="Ball" type="CharacterBody2D" parent="." unique_id=1262881118 node_paths=PackedStringArray("player1", "player2")]
+position = Vector2(576, 323)
+script = ExtResource("2_feb5d")
+player1 = NodePath("../Paddle1")
+player2 = NodePath("../Paddle2")
+
+[node name="Sprite2D" type="Sprite2D" parent="Ball" unique_id=265044708]
+scale = Vector2(0.16885832, 0.17796035)
+texture = ExtResource("2_e2o6t")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ball" unique_id=1322075531]
+shape = SubResource("RectangleShape2D_feb5d")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="Ball" unique_id=1008584769]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=647514078]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 15.0
+offset_bottom = 38.0
+grow_horizontal = 2
+
+[node name="player1_score" type="Label" parent="HBoxContainer" unique_id=1666529925]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+text = "00"
+horizontal_alignment = 1
+
+[node name="player2_score" type="Label" parent="HBoxContainer" unique_id=524277319]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+text = "00"
+horizontal_alignment = 1
+
+[connection signal="screen_exited" from="Ball/VisibleOnScreenNotifier2D" to="Ball" method="_on_visible_on_screen_notifier_2d_screen_exited"]
